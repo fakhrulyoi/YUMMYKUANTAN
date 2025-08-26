@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | YummyKuantan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF6B6B;
+            --primary-dark: #FF5252;
+            --secondary: #4ECDC4;
+            --accent: #45B7D1;
+            --dark: #2C3E50;
+            --gray: #95A5A6;
+            --light: #ECF0F1;
+            --white: #FFFFFF;
+            --success: #2ECC71;
+            --warning: #F39C12;
+            --danger: #E74C3C;
+            --info: #3498DB;
+            --bg-light: #F8F9FA;
+            --bg-dark: #1A1D23;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --shadow: 0 0 20px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--dark);
+        }
+
+        /* Layout */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-dark);
+            color: var(--white);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--white);
+        }
+
+        .sidebar-logo i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .sidebar-logo h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+
+        .menu-section-title {
+            padding: 0 2rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gray);
+        }
+
+        .menu-item {
+            display: block;
+            padding: 0.875rem 2rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary);
+            transform: translateX(-100%);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            color: var(--white);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .menu-item.active {
+            color: var(--white);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-item.active::before,
+        .menu-item:hover::before {
+            transform: translateX(0);
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+        }
+
+        .menu-badge {
+            background: var(--danger);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            float: right;
+            margin-top: 0.1rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--light);
+        }
+
+        .search-bar {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 1px solid var(--light);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background: var(--bg-light);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            color: var(--dark);
+        }
+
+        .header-btn:hover {
+            background: var(--light);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.35rem;
+            border-radius: 20px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-menu:hover {
+            background: var(--light);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Page Content */
+        .page-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-card-icon.primary {
+            background: rgba(255,107,107,0.1);
+            color: var(--primary);
+        }
+
+        .stat-card-icon.success {
+            background: rgba(46,204,113,0.1);
+            color: var(--success);
+        }
+
+        .stat-card-icon.warning {
+            background: rgba(243,156,18,0.1);
+            color: var(--warning);
+        }
+
+        .stat-card-icon.info {
+            background: rgba(52,152,219,0.1);
+            color: var(--info);
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-card-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .trend-up {
+            color: var(--success);
+        }
+
+        .trend-down {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .chart-container {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .chart-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--light);
+            background: var(--white);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chart-btn:hover,
+        .chart-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-light);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--light);
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .table-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(243,156,18,0.1);
+            color: var(--warning);
+        }
+
+        .status-processing {
+            background: rgba(52,152,219,0.1);
+            color: var(--info);
+        }
+
+        .status-completed {
+            background: rgba(46,204,113,0.1);
+            color: var(--success);
+        }
+
+        .status-cancelled {
+            background: rgba(231,76,60,0.1);
+            color: var(--danger);
+        }
+
+        .table-actions-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray);
+        }
+
+        .action-btn:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--light);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--light);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255,107,107,0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid var(--light);
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+
+        .tab:hover {
+            color: var(--dark);
+        }
+
+        .tab.active {
+            color: var(--primary);
+        }
+
+        .tab.active::after {
+            transform: scaleX(1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar-toggle {
+                display: block;
+            }
+
+            .search-bar {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 1rem;
+            }
+
+            .search-bar {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading Spinner */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,107,107,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(400px);
+            transition: var(--transition);
+            z-index: 3000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .toast-icon.success {
+            background: rgba(46,204,113,0.1);
+            color: var(--success);
+        }
+
+        .toast-icon.error {
+            background: rgba(231,76,60,0.1);
+            color: var(--danger);
+        }
+
+        .toast-icon.warning {
+            background: rgba(243,156,18,0.1);
+            color: var(--warning);
+        }
+
+        .toast-icon.info {
+            background: rgba(52,152,219,0.1);
+            color: var(--info);
+        }
+
+        .toast-message {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Calendar */
+        .calendar {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-nav button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-day-header {
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--gray);
+            background: var(--bg-light);
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--light);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-day:hover {
+            background: var(--bg-light);
+        }
+
+        .calendar-day-number {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .calendar-day.other-month .calendar-day-number {
+            color: var(--gray);
+        }
+
+        .calendar-day.today {
+            background: rgba(255,107,107,0.1);
+        }
+
+        .calendar-day.today .calendar-day-number {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .calendar-events {
+            font-size: 0.7rem;
+        }
+
+        .calendar-event {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.15rem 0.3rem;
+            border-radius: 4px;
+            margin-bottom: 0.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="sidebar-logo">
+                    <i class="fas fa-birthday-cake"></i>
+                    <h2>YummyKuantan</h2>
+                </a>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-section-title">Main Menu</div>
+                    <a href="#dashboard" class="menu-item active" data-tab="dashboard">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                    <a href="#orders" class="menu-item" data-tab="orders">
+                        <i class="fas fa-shopping-bag"></i>
+                        Orders
+                        <span class="menu-badge">5</span>
+                    </a>
+                    <a href="#products" class="menu-item" data-tab="products">
+                        <i class="fas fa-box"></i>
+                        Products
+                    </a>
+                    <a href="#customers" class="menu-item" data-tab="customers">
+                        <i class="fas fa-users"></i>
+                        Customers
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">Management</div>
+                    <a href="#inventory" class="menu-item" data-tab="inventory">
+                        <i class="fas fa-warehouse"></i>
+                        Inventory
+                    </a>
+                    <a href="#delivery" class="menu-item" data-tab="delivery">
+                        <i class="fas fa-truck"></i>
+                        Delivery Schedule
+                    </a>
+                    <a href="#analytics" class="menu-item" data-tab="analytics">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                    <a href="#reports" class="menu-item" data-tab="reports">
+                        <i class="fas fa-file-alt"></i>
+                        Reports
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">Settings</div>
+                    <a href="#settings" class="menu-item" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                    <a href="index.html" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search for orders, products, customers...">
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <button class="header-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    
+                    <button class="header-btn">
+                        <i class="fas fa-envelope"></i>
+                        <span class="badge">5</span>
+                    </button>
+                    
+                    <div class="user-menu">
+                        <div class="user-avatar">A</div>
+                        <div class="user-info">
+                            <div class="user-name">Admin User</div>
+                            <div class="user-role">Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard-tab" class="tab-content active">
+                    <div class="page-header">
+                        <h1 class="page-title">Dashboard</h1>
+                        <div class="breadcrumb">
+                            <a href="#">Home</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Dashboard</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value">RM 15,430</div>
+                                    <div class="stat-card-label">Total Revenue</div>
+                                    <div class="stat-card-trend trend-up">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>12% from last month</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card-icon primary">
+                                    <i class="fas fa-dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value">245</div>
+                                    <div class="stat-card-label">Total Orders</div>
+                                    <div class="stat-card-trend trend-up">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>8% from last month</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card-icon success">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value">189</div>
+                                    <div class="stat-card-label">Customers</div>
+                                    <div class="stat-card-trend trend-up">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>5% from last month</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card-icon warning">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div>
+                                    <div class="stat-card-value">4.8</div>
+                                    <div class="stat-card-label">Average Rating</div>
+                                    <div class="stat-card-trend trend-up">
+                                        <i class="fas fa-arrow-up"></i>
+                                        <span>0.3 from last month</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card-icon info">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Chart -->
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3 class="chart-title">Sales Overview</h3>
+                            <div class="chart-actions">
+                                <button class="chart-btn active">Week</button>
+                                <button class="chart-btn">Month</button>
+                                <button class="chart-btn">Year</button>
+                            </div>
+                        </div>
+                        <div id="sales-chart" style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--gray);">
+                            <i class="fas fa-chart-line" style="font-size: 3rem; margin-right: 1rem;"></i>
+                            Sales chart will be rendered here
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Orders Table -->
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">Recent Orders</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    New Order
+                                </button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-001</td>
+                                    <td>John Doe</td>
+                                    <td>Chocolate Moist Cake</td>
+                                    <td>RM 45.00</td>
+                                    <td><span class="table-status status-completed">Completed</span></td>
+                                    <td>May 27, 2025</td>
+                                    <td class="table-actions-cell">
+                                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-002</td>
+                                    <td>Jane Smith</td>
+                                    <td>Brownies Tower</td>
+                                    <td>RM 95.00</td>
+                                    <td><span class="table-status status-processing">Processing</span></td>
+                                    <td>May 27, 2025</td>
+                                    <td class="table-actions-cell">
+                                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-003</td>
+                                    <td>Mike Johnson</td>
+                                    <td>Custom Birthday Cake</td>
+                                    <td>RM 120.00</td>
+                                    <td><span class="table-status status-pending">Pending</span></td>
+                                    <td>May 27, 2025</td>
+                                    <td class="table-actions-cell">
+                                        <button class="action-btn"><i class="fas fa-eye"></i></button>
+                                        <button class="action-btn"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Orders Tab -->
+                <div id="orders-tab" class="tab-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Orders Management</h1>
+                        <div class="breadcrumb">
+                            <a href="#">Home</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Orders</span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">All Orders</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-filter"></i>
+                                    Filter
+                                </button>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    New Order
+                                </button>
+                            </div>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Delivery Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Products Tab -->
+                <div id="products-tab" class="tab-content">
+                    <div class="page-header">
+                        <h1 class="page-title">Products Management</h1>
+                        <div class="breadcrumb">
+                            <a href="#">Home</a>
+                            <i class="fas fa-chevron-right"></i>
+                            <span>Products</span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-actions" style="margin-bottom: 2rem;">
+                        <button class="btn btn-primary" onclick="showModal('product-modal')">
+                            <i class="fas fa-plus"></i>
+                            Add New Product
+                        </button>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <!-- Products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Other tabs content here... -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Product</h3>
+                <button class="modal-close" onclick="closeModal('product-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="product-form">
+                    <div class="form-group">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-control" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="cakes">Cakes</option>
+                            <option value="custom">Custom Cakes</option>
+                            <option value="wedding">Wedding Cakes</option>
+                            <option value="birthday">Birthday Cakes</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Base Price (RM)</label>
+                        <input type="number" class="form-control" name="price" step="0.01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Image URL</label>
+                        <input type="text" class="form-control" name="image">
+                        <div class="form-hint">Enter the URL of the product image</div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('product-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProduct()">Save Product</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon success">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">Success</div>
+            <div class="toast-description">Operation completed successfully</div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+        
+        // Tab Navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                
+                // Show selected tab
+                const tabId = this.dataset.tab + '-tab';
+                const tabContent = document.getElementById(tabId);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                }
+            });
+        });
+        
+        // Modal Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('.toast-icon');
+            const title = toast.querySelector('.toast-title');
+            const description = toast.querySelector('.toast-description');
+            
+            // Update toast content
+            icon.className = `toast-icon ${type}`;
+            icon.innerHTML = getToastIcon(type);
+            title.textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            description.textContent = message;
+            
+            // Show toast
+            toast.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function getToastIcon(type) {
+            const icons = {
+                success: '<i class="fas fa-check"></i>',
+                error: '<i class="fas fa-times"></i>',
+                warning: '<i class="fas fa-exclamation"></i>',
+                info: '<i class="fas fa-info"></i>'
+            };
+            return icons[type] || icons.success;
+        }
+        
+        // Save Product
+        function saveProduct() {
+            const form = document.getElementById('product-form');
+            const formData = new FormData(form);
+            
+            // Here you would send the data to your PHP backend
+            // For now, we'll just show a success message
+            
+            closeModal('product-modal');
+            showToast('Product added successfully!', 'success');
+            form.reset();
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            loadDashboardData();
+        });
+        
+        // Load Dashboard Data
+        function loadDashboardData() {
+            // This would typically fetch data from your PHP backend
+            // For now, we'll use placeholder data
+            
+            console.log('Loading dashboard data...');
+        }
+        
+        // Close modal on background click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // ESC to close modals
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

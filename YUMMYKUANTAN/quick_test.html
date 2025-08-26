@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick YummyKuantan Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; background: #d4a574; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #b8956a; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Quick YummyKuantan Test</h1>
+    
+    <div class="result info">
+        <strong>Current Location:</strong> <span id="current-url"></span><br>
+        <strong>Expected API URL:</strong> <span id="api-url"></span>
+    </div>
+    
+    <button onclick="testAPI()">Test API Connection</button>
+    <button onclick="testDatabase()">Test Database</button>
+    <button onclick="testBasic()">Test Basic Connection</button>
+    
+    <div id="results"></div>
+    
+    <script>
+        // Set current info
+        document.getElementById('current-url').textContent = window.location.href;
+        const apiBase = window.location.href.replace('quick_test.html', '') + 'api/';
+        document.getElementById('api-url').textContent = apiBase;
+        
+        function addResult(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = 'result ' + type;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            document.getElementById('results').appendChild(div);
+        }
+        
+        async function testBasic() {
+            addResult('Testing basic server connection...', 'info');
+            
+            try {
+                // Test current directory
+                const response = await fetch(window.location.href.replace('quick_test.html', 'index.html'));
+                if (response.ok) {
+                    addResult('✅ Server is working - can access files', 'success');
+                } else {
+                    addResult('❌ Server issue - status: ' + response.status, 'error');
+                }
+            } catch (error) {
+                addResult('❌ Cannot reach server: ' + error.message, 'error');
+                addResult('💡 Make sure you access via http://localhost/YUMMYKUANTAN/', 'info');
+            }
+        }
+        
+        async function testAPI() {
+            addResult('Testing Products API...', 'info');
+            
+            const apiUrl = window.location.href.replace('quick_test.html', '') + 'api/products.php';
+            addResult('Trying URL: ' + apiUrl, 'info');
+            
+            try {
+                const response = await fetch(apiUrl + '?action=list');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.error) {
+                        addResult('⚠️ API responded but with error: ' + data.message, 'error');
+                        if (data.message.includes('Database connection failed')) {
+                            addResult('💡 You need to set up the database first!', 'info');
+                        }
+                    } else {
+                        addResult('✅ API is working! Found ' + data.length + ' products', 'success');
+                    }
+                } else {
+                    addResult('❌ API file error - status: ' + response.status, 'error');
+                    const text = await response.text();
+                    addResult('Response: ' + text.substring(0, 200), 'error');
+                }
+            } catch (error) {
+                addResult('❌ Cannot reach API: ' + error.message, 'error');
+                addResult('💡 Check if api/products.php exists and server is running', 'info');
+            }
+        }
+        
+        async function testDatabase() {
+            addResult('Testing database connection...', 'info');
+            
+            const dbUrl = window.location.href.replace('quick_test.html', '') + 'test_connection.php';
+            addResult('Trying URL: ' + dbUrl, 'info');
+            
+            try {
+                const response = await fetch(dbUrl);
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    if (html.includes('Database connection successful')) {
+                        addResult('✅ Database connection working!', 'success');
+                    } else if (html.includes('Database connection failed')) {
+                        addResult('❌ Database connection failed', 'error');
+                        addResult('💡 Go to http://localhost/phpmyadmin and create database "yummykuantan_db"', 'info');
+                    } else {
+                        addResult('⚠️ Database test file responded but result unclear', 'error');
+                    }
+                } else {
+                    addResult('❌ Cannot reach database test file', 'error');
+                }
+            } catch (error) {
+                addResult('❌ Database test failed: ' + error.message, 'error');
+            }
+        }
+        
+        // Auto-run basic test
+        window.addEventListener('load', function() {
+            setTimeout(testBasic, 500);
+        });
+    </script>
+</body>
+</html>
