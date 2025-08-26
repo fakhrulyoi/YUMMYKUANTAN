@@ -1,1 +1,2151 @@
-try
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YummyKuantan | Artisan Cakes & Desserts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #d4a574;
+            --primary-dark: #b8956a;
+            --secondary: #f5f5f5;
+            --accent: #8b4513;
+            --dark: #2c2c2c;
+            --light: #ffffff;
+            --gray: #666;
+            --border: #e5e5e5;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+            --shadow: 0 2px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 40px rgba(0,0,0,0.12);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-icon {
+            position: relative;
+            padding: 0.75rem;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-icon:hover {
+            background: var(--primary);
+            color: var(--light);
+            transform: translateY(-2px);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: var(--light);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.9), rgba(139, 69, 19, 0.9)), url('https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3') center/cover;
+            color: var(--light);
+            text-align: center;
+            padding: 6rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Page Content */
+        .page-content {
+            min-height: 70vh;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .product-card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+            background: var(--secondary);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-overlay {
+            opacity: 1;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-description {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--light);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--light);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: var(--light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark);
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(212, 165, 116, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            max-width: 800px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: var(--danger);
+            color: var(--light);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Cart Modal Styles */
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: var(--secondary);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-details {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: var(--secondary);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary);
+            color: var(--light);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid var(--border);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background: var(--light);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--light);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-hover);
+            z-index: 3000;
+            transform: translateX(400px);
+            transition: var(--transition);
+            border-left: 4px solid var(--success);
+            min-width: 300px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        .toast.info {
+            border-left-color: var(--info);
+        }
+
+        /* Category Filter */
+        .category-filter {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .category-btn {
+            margin: 0.25rem;
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: var(--light);
+            border-color: var(--primary);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            background: var(--primary);
+            color: var(--light);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .custom-cake-designer {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+        }
+
+        /* Custom Cake Designer */
+        .custom-cake-designer {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .cake-preview {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            height: 300px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .cake-details {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <h1>YummyKuantan</h1>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="shop"><i class="fas fa-store"></i> Shop</a></li>
+                    <li><a href="#" class="nav-link" data-page="custom"><i class="fas fa-birthday-cake"></i> Custom Cakes</a></li>
+                    <li><a href="#" class="nav-link" data-page="about"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="admin.html" class="admin-link"><i class="fas fa-user-shield"></i> Admin</a></li>
+                </ul>
+            </nav>
+            
+            <div class="nav-icons">
+                <button class="nav-icon" id="search-icon"><i class="fas fa-search"></i></button>
+                <button class="nav-icon" id="wishlist-icon"><i class="fas fa-heart"></i></button>
+                <button class="nav-icon" id="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="page-content">
+            <!-- Home Page -->
+            <div id="home-page" class="page-section active">
+                <div class="hero">
+                    <h1>Handcrafted Cakes</h1>
+                    <p>Made with love, delivered fresh to your doorstep</p>
+                    <button class="btn btn-primary" onclick="showPage('shop')">
+                        <i class="fas fa-shopping-bag"></i> Shop Now
+                    </button>
+                </div>
+                
+                <div class="section-header">
+                    <h2>Featured Cakes</h2>
+                    <p>Our most popular handcrafted cakes, perfect for any celebration</p>
+                </div>
+                
+                <div class="products-grid" id="featured-products">
+                    <div class="loading" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                        Loading featured products...
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>Custom Cakes</h3>
+                        <p>Personalized designs for your special occasions</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-shipping-fast"></i>
+                        <h3>Fresh Delivery</h3>
+                        <p>Same-day delivery across Kuantan</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart"></i>
+                        <h3>Made with Love</h3>
+                        <p>Traditional recipes with premium ingredients</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-award"></i>
+                        <h3>Quality Assured</h3>
+                        <p>100% satisfaction guarantee</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shop Page -->
+            <div id="shop-page" class="page-section">
+                <div class="section-header">
+                    <h2>Our Cakes</h2>
+                    <p>Discover our complete collection of handcrafted cakes</p>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="category-filter">
+                    <button class="btn btn-outline category-btn active" data-category="all">All Cakes</button>
+                    <button class="btn btn-outline category-btn" data-category="chocolate">Chocolate</button>
+                    <button class="btn btn-outline category-btn" data-category="brownies">Brownies</button>
+                    <button class="btn btn-outline category-btn" data-category="cheesecake">Cheesecake</button>
+                    <button class="btn btn-outline category-btn" data-category="birthday">Birthday</button>
+                    <button class="btn btn-outline category-btn" data-category="wedding">Wedding</button>
+                    <button class="btn btn-outline category-btn" data-category="custom">Custom</button>
+                </div>
+                
+                <div class="products-grid" id="all-products">
+                    <div class="loading" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                        Loading products...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Cakes Page -->
+            <div id="custom-page" class="page-section">
+                <div class="section-header">
+                    <h2>Custom Cake Designer</h2>
+                    <p>Create your perfect cake with our custom design options</p>
+                </div>
+                
+                <div class="custom-cake-designer">
+                    <div>
+                        <h3 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Design Your Cake</h3>
+                        <form id="custom-cake-form">
+                            <div class="form-group">
+                                <label class="form-label">Cake Size <span class="required">*</span></label>
+                                <select class="form-control" id="custom-size" required>
+                                    <option value="">Select Size</option>
+                                    <option value="6inch" data-price="60">6 inch (4-6 servings) - RM 60</option>
+                                    <option value="8inch" data-price="85">8 inch (8-12 servings) - RM 85</option>
+                                    <option value="10inch" data-price="120">10 inch (16-20 servings) - RM 120</option>
+                                    <option value="12inch" data-price="160">12 inch (25-30 servings) - RM 160</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Cake Flavor <span class="required">*</span></label>
+                                <select class="form-control" id="custom-flavor" required>
+                                    <option value="">Select Flavor</option>
+                                    <option value="chocolate">Rich Chocolate</option>
+                                    <option value="vanilla">Classic Vanilla</option>
+                                    <option value="strawberry">Fresh Strawberry</option>
+                                    <option value="red-velvet">Red Velvet</option>
+                                    <option value="carrot">Carrot Walnut</option>
+                                    <option value="lemon">Lemon Zest</option>
+                                    <option value="pandan">Pandan</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Frosting Type <span class="required">*</span></label>
+                                <select class="form-control" id="custom-frosting" required>
+                                    <option value="">Select Frosting</option>
+                                    <option value="buttercream">Buttercream</option>
+                                    <option value="cream-cheese">Cream Cheese</option>
+                                    <option value="ganache">Chocolate Ganache</option>
+                                    <option value="fondant">Fondant</option>
+                                    <option value="whipped">Whipped Cream</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Color Theme</label>
+                                <input type="text" class="form-control" id="custom-color" placeholder="e.g., Pink and Gold">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Message on Cake</label>
+                                <input type="text" class="form-control" id="custom-message" placeholder="e.g., Happy Birthday John!">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Special Instructions</label>
+                                <textarea class="form-control" id="custom-instructions" rows="3" placeholder="Any special requests or allergies..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Delivery Date <span class="required">*</span></label>
+                                <input type="date" class="form-control" id="custom-date" required>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                <i class="fas fa-cart-plus"></i> Add to Cart - RM <span id="custom-price">0</span>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div>
+                        <h3 style="margin-bottom: 2rem; font-family: 'Playfair Display', serif;">Cake Preview</h3>
+                        <div class="cake-preview">
+                            <i class="fas fa-birthday-cake"></i>
+                        </div>
+                        <div id="cake-details" class="cake-details">
+                            <h4 style="margin-bottom: 1rem; font-family: 'Playfair Display', serif;">Your Custom Cake</h4>
+                            <p style="color: var(--gray);">Select options above to see your cake details and pricing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Page -->
+            <div id="about-page" class="page-section">
+                <div class="section-header">
+                    <h2>About YummyKuantan</h2>
+                    <p>Bringing sweetness to Kuantan since 2020</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin: 3rem 0; align-items: center;">
+                    <div>
+                        <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1rem;">Our Story</h3>
+                        <p style="margin-bottom: 1rem;">Founded in the heart of Kuantan, YummyKuantan began as a small family bakery with a passion for creating memorable moments through exceptional cakes.</p>
+                        <p style="margin-bottom: 1rem;">We specialize in traditional Malaysian favorites like Kek Batik, rich chocolate cakes, and custom celebration cakes that bring families together.</p>
+                        <p>Every cake is handcrafted with premium ingredients and traditional techniques passed down through generations.</p>
+                    </div>
+                    <div style="background: var(--secondary); height: 300px; border-radius: var(--border-radius); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: var(--primary);">
+                        <i class="fas fa-store"></i>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>5000+ Happy Customers</h3>
+                        <p>Serving Kuantan and surrounding areas</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>20+ Cake Varieties</h3>
+                        <p>Traditional and modern flavors</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Same Day Delivery</h3>
+                        <p>Fresh cakes delivered fast</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h3>4.9/5 Rating</h3>
+                        <p>Consistently excellent reviews</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-product-name">Product Details</h3>
+                <button class="close-modal" onclick="closeModal('product-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div>
+                        <img id="modal-product-image" src="" alt="" style="width: 100%; height: 300px; object-fit: cover; border-radius: var(--border-radius); margin-bottom: 1rem;">
+                        <div id="modal-product-thumbnails" style="display: flex; gap: 0.5rem; overflow-x: auto;">
+                            <!-- Thumbnails will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="product-rating" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <div style="color: #ffc107;">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span style="color: var(--gray); font-size: 0.9rem;">(4.8 out of 5)</span>
+                        </div>
+                        
+                        <div id="modal-product-price" class="product-price">RM 0.00</div>
+                        <div id="modal-product-description" style="color: var(--gray); margin-bottom: 1.5rem;"></div>
+                        
+                        <div id="modal-product-variants" style="margin-bottom: 1.5rem;">
+                            <!-- Variants will be loaded here -->
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <span style="font-weight: 600;">Quantity:</span>
+                            <div style="display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--border-radius);">
+                                <button class="quantity-btn" onclick="updateModalQuantity(-1)" style="border-radius: 0; border-top-left-radius: var(--border-radius); border-bottom-left-radius: var(--border-radius);">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="modal-quantity" value="1" min="1" style="width: 60px; text-align: center; border: none; padding: 0.5rem;">
+                                <button class="quantity-btn" onclick="updateModalQuantity(1)" style="border-radius: 0; border-top-right-radius: var(--border-radius); border-bottom-right-radius: var(--border-radius);">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button class="btn btn-primary" onclick="addToCartFromModal()" style="width: 100%;">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline" onclick="addToWishlist()" style="width: 100%;">
+                                <i class="fas fa-heart"></i> Add to Wishlist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Shopping Cart</h3>
+                <button class="close-modal" onclick="closeModal('cart-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div id="cart-items">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                
+                <div class="cart-total">
+                    <span>Total: RM <span id="cart-total">0.00</span></span>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('cart-modal')">Continue Shopping</button>
+                <button class="btn btn-primary" onclick="proceedToCheckout()">
+                    <i class="fas fa-credit-card"></i> Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Checkout</h3>
+                <button class="close-modal" onclick="closeModal('checkout-modal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="checkout-form">
+                    <h4 style="margin-bottom: 1rem;">Customer Information</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">First Name <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name <span class="required">*</span></label>
+                            <input type="text" class="form-control" name="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Email <span class="required">*</span></label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone <span class="required">*</span></label>
+                            <input type="tel" class="form-control" name="phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Delivery Address <span class="required">*</span></label>
+                        <textarea class="form-control" name="address" rows="3" required placeholder="Street address, city, postcode"></textarea>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Delivery Date <span class="required">*</span></label>
+                            <input type="date" class="form-control" name="deliveryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Delivery Time</label>
+                            <select class="form-control" name="deliveryTime">
+                                <option value="morning">Morning (9AM - 12PM)</option>
+                                <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                                <option value="evening">Evening (5PM - 8PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Delivery Method <span class="required">*</span></label>
+                        <select class="form-control" name="deliveryMethod" onchange="updateDeliveryFee()">
+                            <option value="delivery">Delivery (+RM 5.00)</option>
+                            <option value="pickup">Self Pickup (Free)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Special Instructions</label>
+                        <textarea class="form-control" name="instructions" rows="2" placeholder="Any special requests or notes..."></textarea>
+                    </div>
+                    
+                    <div style="background: var(--secondary); padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                        <h4 style="margin-bottom: 0.5rem;">Order Summary</h4>
+                        <div id="checkout-summary">
+                            <!-- Order summary will be loaded here -->
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--border); padding-top: 0.5rem; margin-top: 0.5rem;">
+                            <span>Total:</span>
+                            <span>RM <span id="checkout-total">0.00</span></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('checkout-modal')">Back to Cart</button>
+                <button class="btn btn-primary" onclick="submitOrder()">
+                    <i class="fas fa-check"></i> Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div id="toast-message"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YummyKuantan</h3>
+                    <p>Handcrafted cakes made with love and tradition. Bringing sweetness to every celebration in Kuantan.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" onclick="showPage('home')">Home</a></li>
+                        <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+                        <li><a href="#" onclick="showPage('custom')">Custom Cakes</a></li>
+                        <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Kuantan, Pahang</li>
+                        <li><i class="fas fa-phone"></i> +60 12-345-6789</li>
+                        <li><i class="fas fa-envelope"></i> hello@yummykuantan.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 9AM - 6PM</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Delivery Areas</h3>
+                    <ul>
+                        <li>Kuantan City</li>
+                        <li>Bandar Indera Mahkota</li>
+                        <li>Gambang</li>
+                        <li>Balok</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2024 YummyKuantan. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Application State
+        let products = [];
+        let cart = [];
+        let currentPage = 'home';
+        let currentProduct = null;
+        let selectedVariant = null;
+        
+        // API Configuration
+        const API_BASE_URL = 'api/';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductsFromAPI();
+            updateCartCount();
+            setupEventListeners();
+            setMinimumDeliveryDate();
+            setupCategoryFilters();
+            loadCartFromStorage();
+        });
+
+        // Load products from API
+        async function loadProductsFromAPI() {
+            try {
+                showToast('Loading products...', 'info');
+                
+                const response = await fetch(`${API_BASE_URL}products.php?action=list`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.message || 'Failed to load products');
+                }
+                
+                products = data;
+                loadProducts();
+                showToast('Products loaded successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showToast(`Error loading products: ${error.message}`, 'error');
+                
+                // Fallback to demo data
+                products = await generateDemoProducts();
+                loadProducts();
+            }
+        }
+
+        // Fallback demo products
+        async function generateDemoProducts() {
+            return [
+                {
+                    id: 1,
+                    name: "Chocolate Moist Cake",
+                    type: "chocolate",
+                    price: 45.00,
+                    description: "Rich and moist chocolate cake that melts in your mouth",
+                    images: [
+                        "gambar kek/chocolate moist 1.jpg",
+                        "gambar kek/cm2.jpg",
+                        "gambar kek/cm3.jpg"
+                    ],
+                    variants: [],
+                    featured: true
+                },
+                {
+                    id: 2,
+                    name: "Brownies Tower",
+                    type: "brownies",
+                    price: 95.00,
+                    description: "Delicious tower of brownies, perfect for sharing",
+                    images: [
+                        "gambar kek/brownies tower 8.jpg",
+                        "gambar kek/brownies tower 1.jpg"
+                    ],
+                    variants: [],
+                    featured: true
+                },
+                {
+                    id: 3,
+                    name: "Custom Birthday Cake",
+                    type: "birthday",
+                    price: 80.00,
+                    description: "Customizable birthday cake for your special day",
+                    images: [
+                        "gambar kek/cc6.jpg",
+                        "gambar kek/cc1.jpg"
+                    ],
+                    variants: [
+                        { name: "7 inch", price: 80.00 },
+                        { name: "9 inch", price: 120.00 }
+                    ],
+                    featured: true
+                },
+                {
+                    id: 4,
+                    name: "Wedding Cake - 2 Tier",
+                    type: "wedding",
+                    price: 250.00,
+                    description: "Elegant two-tier wedding cake for your special day",
+                    images: [
+                        "gambar kek/2twc3.jpg"
+                    ],
+                    variants: [
+                        { name: "6 & 8 inch", price: 250.00 },
+                        { name: "8 & 10 inch", price: 350.00 }
+                    ],
+                    featured: false
+                },
+                {
+                    id: 5,
+                    name: "Classic Brownies",
+                    type: "brownies",
+                    price: 45.00,
+                    description: "Traditional brownies with rich chocolate flavor",
+                    images: [
+                        "gambar kek/bro1.jpg",
+                        "gambar kek/bro1.jpg"
+                    ],
+                    variants: [
+                        { name: "Plain", price: 45.00 },
+                        { name: "With Decoration", price: 65.00 }
+                    ],
+                    featured: false
+                },
+                {
+                    id: 6,
+                    name: "Brownies Cheesecake",
+                    type: "cheesecake",
+                    price: 90.00,
+                    description: "Perfect combination of brownies and creamy cheese",
+                    images: [
+                        "gambar kek/bc2.jpg"
+                    ],
+                    variants: [],
+                    featured: false
+                }
+            ];
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page) showPage(page);
+                });
+            });
+
+            // Custom cake form
+            document.getElementById('custom-cake-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCustomCakeToCart();
+            });
+
+            // Custom cake price calculation
+            document.getElementById('custom-size').addEventListener('change', updateCustomCakePrice);
+            document.getElementById('custom-flavor').addEventListener('change', updateCustomCakePreview);
+            document.getElementById('custom-frosting').addEventListener('change', updateCustomCakePreview);
+
+            // Cart icon
+            document.getElementById('cart-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                showCart();
+            });
+
+            // Search functionality
+            document.getElementById('search-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                const searchTerm = prompt('Search for cakes:');
+                if (searchTerm) {
+                    searchProducts(searchTerm);
+                }
+            });
+
+            // Wishlist functionality
+            document.getElementById('wishlist-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                showToast('Wishlist feature coming soon!', 'warning');
+            });
+
+            // Modal close on background click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            });
+
+            // Auto-save cart when page unloads
+            window.addEventListener('beforeunload', saveCartToStorage);
+        }
+
+        // Page navigation
+        function showPage(page) {
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.querySelector(`[data-page="${page}"]`);
+            if (activeLink) activeLink.classList.add('active');
+
+            // Show page content
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const targetPage = document.getElementById(`${page}-page`);
+            if (targetPage) targetPage.classList.add('active');
+
+            currentPage = page;
+        }
+
+        // Load products into UI
+        function loadProducts() {
+            loadFeaturedProducts();
+            loadAllProducts();
+        }
+
+        function loadFeaturedProducts() {
+            const container = document.getElementById('featured-products');
+            const featured = products.filter(p => p.featured).slice(0, 6);
+            
+            if (featured.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>No featured products available</h3>
+                        <p>Check back soon for our featured cakes!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = featured.map(product => createProductCard(product)).join('');
+        }
+
+        function loadAllProducts() {
+            const container = document.getElementById('all-products');
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>No products available</h3>
+                        <p>We're working on adding more delicious cakes!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = products.map(product => createProductCard(product)).join('');
+        }
+
+        function createProductCard(product) {
+            const hasVariants = product.variants && product.variants.length > 0;
+            const displayPrice = hasVariants ? 
+                `From RM ${Math.min(...product.variants.map(v => v.price)).toFixed(2)}` : 
+                `RM ${product.price.toFixed(2)}`;
+
+            const primaryImage = product.images && product.images.length > 0 ? 
+                product.images[0] : 
+                'https://via.placeholder.com/300x250?text=No+Image';
+
+            return `
+                <div class="product-card" data-type="${product.type}" data-price="${product.price}">
+                    <div class="product-image">
+                        <img src="${primaryImage}" alt="${product.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x250?text=No+Image'">
+                        <div class="product-overlay">
+                            <button class="btn btn-primary" onclick="showProductDetails(${product.id})">
+                                <i class="fas fa-eye"></i> Quick View
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${displayPrice}</div>
+                        <div class="product-description">${product.description}</div>
+                        ${product.type ? `<div style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">Type: ${product.type}</div>` : ''}
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button class="btn btn-primary" onclick="quickAddToCart(${product.id})" style="flex: 1;">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline" onclick="showProductDetails(${product.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Setup category filters
+        function setupCategoryFilters() {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Filter products
+                    const category = this.dataset.category;
+                    filterProductsByCategory(category);
+                });
+            });
+        }
+
+        // Filter products by category
+        function filterProductsByCategory(category) {
+            const container = document.getElementById('all-products');
+            let filteredProducts = products;
+            
+            if (category !== 'all') {
+                filteredProducts = products.filter(product => product.type === category);
+            }
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-search"></i>
+                        <h3>No products found</h3>
+                        <p>Try selecting a different category</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
+            }
+        }
+
+        // Show product details modal
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                showToast('Product not found', 'error');
+                return;
+            }
+
+            currentProduct = product;
+            selectedVariant = null;
+
+            // Update modal content
+            document.getElementById('modal-product-name').textContent = product.name;
+            document.getElementById('modal-product-description').textContent = product.description;
+            
+            // Set main image
+            const mainImage = document.getElementById('modal-product-image');
+            if (product.images && product.images.length > 0) {
+                mainImage.src = product.images[0];
+                mainImage.alt = product.name;
+            } else {
+                mainImage.src = 'https://via.placeholder.com/400x300?text=No+Image';
+            }
+
+            // Load thumbnails
+            const thumbnailsContainer = document.getElementById('modal-product-thumbnails');
+            if (product.images && product.images.length > 1) {
+                thumbnailsContainer.innerHTML = product.images.map((img, index) => 
+                    `<img src="${img}" alt="${product.name}" 
+                          style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; opacity: ${index === 0 ? '1' : '0.7'};" 
+                          onclick="changeMainImage('${img}', this)">`
+                ).join('');
+            } else {
+                thumbnailsContainer.innerHTML = '';
+            }
+
+            // Handle variants
+            const variantsContainer = document.getElementById('modal-product-variants');
+            if (product.variants && product.variants.length > 0) {
+                variantsContainer.innerHTML = `
+                    <div style="margin-bottom: 0.5rem; font-weight: 600;">Size Options:</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        ${product.variants.map((variant, index) => `
+                            <button class="btn btn-outline variant-option ${index === 0 ? 'selected' : ''}" 
+                                    onclick="selectVariant(${index})" data-price="${variant.price}">
+                                ${variant.name} - RM ${variant.price.toFixed(2)}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                selectedVariant = product.variants[0];
+                updateModalPrice(product.variants[0].price);
+            } else {
+                variantsContainer.innerHTML = '';
+                updateModalPrice(product.price);
+            }
+
+            // Reset quantity
+            document.getElementById('modal-quantity').value = 1;
+            
+            showModal('product-modal');
+        }
+
+        function changeMainImage(src, thumbnail) {
+            document.getElementById('modal-product-image').src = src;
+            // Update thumbnail opacity
+            document.querySelectorAll('#modal-product-thumbnails img').forEach(img => {
+                img.style.opacity = img === thumbnail ? '1' : '0.7';
+            });
+        }
+
+        function selectVariant(variantIndex) {
+            if (!currentProduct || !currentProduct.variants) return;
+            
+            selectedVariant = currentProduct.variants[variantIndex];
+            
+            // Update UI
+            document.querySelectorAll('.variant-option').forEach((option, index) => {
+                if (index === variantIndex) {
+                    option.classList.add('selected');
+                    option.style.background = 'var(--primary)';
+                    option.style.color = 'var(--light)';
+                } else {
+                    option.classList.remove('selected');
+                    option.style.background = '';
+                    option.style.color = '';
+                }
+            });
+            
+            updateModalPrice(selectedVariant.price);
+        }
+
+        function updateModalPrice(price) {
+            document.getElementById('modal-product-price').textContent = `RM ${price.toFixed(2)}`;
+        }
+
+        function updateModalQuantity(change) {
+            const quantityInput = document.getElementById('modal-quantity');
+            let newQuantity = parseInt(quantityInput.value) + change;
+            if (newQuantity < 1) newQuantity = 1;
+            quantityInput.value = newQuantity;
+        }
+
+        // Cart functions
+        function quickAddToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                showToast('Product not found', 'error');
+                return;
+            }
+
+            addToCart(product, 1);
+        }
+
+        function addToCartFromModal() {
+            if (!currentProduct) {
+                showToast('No product selected', 'error');
+                return;
+            }
+
+            const quantity = parseInt(document.getElementById('modal-quantity').value);
+            const variant = selectedVariant || null;
+
+            addToCart(currentProduct, quantity, variant);
+            closeModal('product-modal');
+        }
+
+        function addToCart(product, quantity = 1, variant = null) {
+            const price = variant ? variant.price : product.price;
+            const variantName = variant ? variant.name : '';
+            const cartItemId = `${product.id}-${variantName}`;
+
+            const existingItem = cart.find(item => item.cartId === cartItemId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    cartId: cartItemId,
+                    id: product.id,
+                    name: product.name,
+                    price: price,
+                    quantity: quantity,
+                    image: product.images && product.images.length > 0 ? product.images[0] : null,
+                    variant: variantName,
+                    type: product.type,
+                    description: product.description
+                });
+            }
+
+            updateCartCount();
+            saveCartToStorage();
+            showToast(`${product.name} added to cart!`, 'success');
+        }
+
+        function addCustomCakeToCart() {
+            const size = document.getElementById('custom-size');
+            const flavor = document.getElementById('custom-flavor').value;
+            const frosting = document.getElementById('custom-frosting').value;
+            const color = document.getElementById('custom-color').value;
+            const message = document.getElementById('custom-message').value;
+            const instructions = document.getElementById('custom-instructions').value;
+            const date = document.getElementById('custom-date').value;
+            
+            if (!size.value || !flavor || !frosting || !date) {
+                showToast('Please fill all required fields', 'error');
+                return;
+            }
+
+            const price = parseInt(size.selectedOptions[0].dataset.price);
+            const customCake = {
+                cartId: `custom-${Date.now()}`,
+                id: Date.now(),
+                name: `Custom ${flavor} Cake`,
+                price: price,
+                quantity: 1,
+                image: null,
+                variant: size.selectedOptions[0].text.split(' - ')[0],
+                custom: true,
+                type: 'custom',
+                details: {
+                    size: size.selectedOptions[0].text,
+                    flavor,
+                    frosting,
+                    color,
+                    message,
+                    instructions,
+                    date
+                }
+            };
+
+            cart.push(customCake);
+            updateCartCount();
+            saveCartToStorage();
+            showToast('Custom cake added to cart!', 'success');
+            
+            document.getElementById('custom-cake-form').reset();
+            updateCustomCakePrice();
+            updateCustomCakePreview();
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        function removeFromCart(cartId) {
+            cart = cart.filter(item => item.cartId !== cartId);
+            updateCartCount();
+            saveCartToStorage();
+            loadCartItems();
+            showToast('Item removed from cart', 'warning');
+        }
+
+        function updateCartQuantity(cartId, change) {
+            const item = cart.find(item => item.cartId === cartId);
+            if (!item) return;
+
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                removeFromCart(cartId);
+                return;
+            }
+
+            updateCartCount();
+            saveCartToStorage();
+            loadCartItems();
+        }
+
+        function showCart() {
+            loadCartItems();
+            showModal('cart-modal');
+        }
+
+        function loadCartItems() {
+            const container = document.getElementById('cart-items');
+            const totalSpan = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-cart"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Add some delicious cakes to get started!</p>
+                    </div>
+                `;
+                totalSpan.textContent = '0.00';
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image || 'https://via.placeholder.com/60x60?text=Cake'}" 
+                         alt="${item.name}" class="cart-item-image" 
+                         onerror="this.src='https://via.placeholder.com/60x60?text=Cake'">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-details">
+                            ${item.variant ? `Size: ${item.variant}` : ''}
+                            ${item.custom ? ' (Custom Order)' : ''}
+                            ${item.type ? ` | Type: ${item.type}` : ''}
+                        </div>
+                        <div class="cart-item-price">RM ${item.price.toFixed(2)} each</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.cartId}', -1)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span style="margin: 0 0.5rem; font-weight: 600;">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.cartId}', 1)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button onclick="removeFromCart('${item.cartId}')" 
+                            style="background: var(--danger); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; margin-left: 1rem;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            totalSpan.textContent = total.toFixed(2);
+        }
+
+        // Checkout functions
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                showToast('Your cart is empty', 'error');
+                return;
+            }
+
+            loadCheckoutSummary();
+            setMinimumDeliveryDate();
+            closeModal('cart-modal');
+            showModal('checkout-modal');
+        }
+
+        function loadCheckoutSummary() {
+            const container = document.getElementById('checkout-summary');
+            const totalSpan = document.getElementById('checkout-total');
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const deliveryFee = 5.00; // Default delivery fee
+            const total = subtotal + deliveryFee;
+
+            container.innerHTML = `
+                ${cart.map(item => `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>${item.name} ${item.variant ? `(${item.variant})` : ''} × ${item.quantity}</span>
+                        <span>RM ${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('')}
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border);">
+                    <span>Subtotal:</span>
+                    <span>RM ${subtotal.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Delivery Fee:</span>
+                    <span id="delivery-fee-display">RM ${deliveryFee.toFixed(2)}</span>
+                </div>
+            `;
+
+            totalSpan.textContent = total.toFixed(2);
+        }
+
+        function updateDeliveryFee() {
+            const deliveryMethod = document.querySelector('select[name="deliveryMethod"]').value;
+            const deliveryFeeDisplay = document.getElementById('delivery-fee-display');
+            const totalSpan = document.getElementById('checkout-total');
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const deliveryFee = deliveryMethod === 'pickup' ? 0 : 5.00;
+            const total = subtotal + deliveryFee;
+
+            deliveryFeeDisplay.textContent = `RM ${deliveryFee.toFixed(2)}`;
+            totalSpan.textContent = total.toFixed(2);
+        }
+
+        async function submitOrder() {
+            const form = document.getElementById('checkout-form');
+            const formData = new FormData(form);
+            
+            // Validate form
+            const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'deliveryDate'];
+            for (let field of requiredFields) {
+                if (!formData.get(field)) {
+                    showToast(`Please fill in ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}`, 'error');
+                    return;
+                }
+            }
+
+            // Calculate totals
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const deliveryFee = formData.get('deliveryMethod') === 'pickup' ? 0 : 5.00;
+            const total = subtotal + deliveryFee;
+
+            // Prepare order data
+            const orderData = {
+                customer: {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    address: formData.get('address'),
+                    deliveryDate: formData.get('deliveryDate'),
+                    deliveryTime: formData.get('deliveryTime'),
+                    deliveryMethod: formData.get('deliveryMethod'),
+                    instructions: formData.get('instructions')
+                },
+                items: cart,
+                subtotal,
+                deliveryFee,
+                total
+            };
+
+            try {
+                showToast('Processing order...', 'info');
+
+                const response = await fetch(`${API_BASE_URL}orders.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.error) {
+                    throw new Error(result.message || 'Failed to create order');
+                }
+
+                // Clear cart and show success
+                cart = [];
+                updateCartCount();
+                saveCartToStorage();
+
+                closeModal('checkout-modal');
+                showToast(`Order created successfully! Order #${result.order_number}`, 'success');
+                
+                // Show success message
+                setTimeout(() => {
+                    alert(`Thank you for your order!\n\nOrder Number: ${result.order_number}\nTotal: RM ${total.toFixed(2)}\n\nWe will contact you shortly to confirm the details and delivery schedule.`);
+                }, 1000);
+
+            } catch (error) {
+                console.error('Error creating order:', error);
+                showToast(`Error creating order: ${error.message}`, 'error');
+            }
+        }
+
+        // Custom cake functions
+        function updateCustomCakePrice() {
+            const sizeSelect = document.getElementById('custom-size');
+            const priceSpan = document.getElementById('custom-price');
+            
+            if (sizeSelect.value) {
+                const price = sizeSelect.selectedOptions[0].dataset.price || 0;
+                priceSpan.textContent = price;
+            } else {
+                priceSpan.textContent = '0';
+            }
+            
+            updateCustomCakePreview();
+        }
+
+        function updateCustomCakePreview() {
+            const size = document.getElementById('custom-size').value;
+            const flavor = document.getElementById('custom-flavor').value;
+            const frosting = document.getElementById('custom-frosting').value;
+            const color = document.getElementById('custom-color').value;
+            const message = document.getElementById('custom-message').value;
+            const instructions = document.getElementById('custom-instructions').value;
+            
+            const detailsDiv = document.getElementById('cake-details');
+            
+            if (!size && !flavor && !frosting) {
+                detailsDiv.innerHTML = `
+                    <h4 style="margin-bottom: 1rem; font-family: 'Playfair Display', serif;">Your Custom Cake</h4>
+                    <p style="color: var(--gray);">Select options above to see your cake details and pricing</p>
+                `;
+                return;
+            }
+            
+            let details = '<h4 style="margin-bottom: 1rem; font-family: \'Playfair Display\', serif;">Your Custom Cake</h4>';
+            details += '<ul style="list-style: none; padding: 0;">';
+            
+            if (size) {
+                const sizeText = document.getElementById('custom-size').selectedOptions[0].text;
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Size:</strong> ${sizeText}</li>`;
+            }
+            
+            if (flavor) {
+                const flavorText = document.getElementById('custom-flavor').selectedOptions[0].text;
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Flavor:</strong> ${flavorText}</li>`;
+            }
+            
+            if (frosting) {
+                const frostingText = document.getElementById('custom-frosting').selectedOptions[0].text;
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Frosting:</strong> ${frostingText}</li>`;
+            }
+            
+            if (color) {
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Color Theme:</strong> ${color}</li>`;
+            }
+            
+            if (message) {
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Message:</strong> "${message}"</li>`;
+            }
+            
+            if (instructions) {
+                details += `<li style="margin-bottom: 0.5rem;"><strong>Instructions:</strong> ${instructions}</li>`;
+            }
+            
+            details += '</ul>';
+            
+            if (size) {
+                const price = document.getElementById('custom-size').selectedOptions[0].dataset.price;
+                details += `<div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                                <strong style="font-size: 1.2rem; color: var(--primary);">Total: RM ${price}</strong>
+                            </div>`;
+            }
+            
+            detailsDiv.innerHTML = details;
+        }
+
+        function setMinimumDeliveryDate() {
+            // Set minimum date for orders (2 days from today)
+            const today = new Date();
+            const minDate = new Date(today.setDate(today.getDate() + 2));
+            
+            const customDateInput = document.getElementById('custom-date');
+            if (customDateInput) {
+                customDateInput.min = minDate.toISOString().split('T')[0];
+            }
+            
+            const deliveryDateInput = document.querySelector('input[name="deliveryDate"]');
+            if (deliveryDateInput) {
+                deliveryDateInput.min = minDate.toISOString().split('T')[0];
+            }
+        }
+
+        // Search functionality
+        function searchProducts(term) {
+            const lowerTerm = term.toLowerCase();
+            const filtered = products.filter(product => 
+                product.name.toLowerCase().includes(lowerTerm) ||
+                product.description.toLowerCase().includes(lowerTerm) ||
+                (product.type && product.type.toLowerCase().includes(lowerTerm))
+            );
+            
+            if (filtered.length === 0) {
+                showToast('No products found', 'warning');
+                return;
+            }
+            
+            // Show shop page with filtered results
+            showPage('shop');
+            const container = document.getElementById('all-products');
+            container.innerHTML = filtered.map(product => createProductCard(product)).join('');
+            
+            showToast(`Found ${filtered.length} products`, 'success');
+        }
+
+        // Wishlist functionality
+        function addToWishlist() {
+            showToast('Wishlist feature coming soon!', 'warning');
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Storage functions
+        function saveCartToStorage() {
+            try {
+                localStorage.setItem('yummyKuantanCart', JSON.stringify(cart));
+            } catch (e) {
+                console.log('Unable to save cart to localStorage');
+            }
+        }
+
+        function loadCartFromStorage() {
+            try {
+                const savedCart = localStorage.getItem('yummyKuantanCart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                    updateCartCount();
+                }
+            } catch (e) {
+                console.log('Unable to load cart from localStorage');
+            }
+        }
+
+        // Utility functions
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toast.className = 'toast ' + type;
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        console.log('YummyKuantan website loaded successfully!');
+    </script>
+</body>
+</html>
